@@ -3,203 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Algebra Game</title>
-    <style>
-        /* Use Helvetica font for the entire page */
-        body, h2, #equation, #result, label, button {
-            font-family: 'Helvetica', sans-serif;
-        }
+    <title>Code Validation</title>
 
-        /* Animated gradient background */
+    <style>
         body {
-            margin: 0;
-            height: 100vh;
-            background: linear-gradient(270deg, violet, pink, turquoise);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .container {
+            text-align: center;
         }
 
-        /* Style for the equation */
-        #equation {
-            font-size: 64px;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-            margin-bottom: 20px;
-        }
-
-        /* Style for the result message */
-        #result {
-            margin-top: 20px;
-            font-size: 32px;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-        }
-
-        /* Style for the Next button */
-        #next {
-            margin-top: 20px;
+        input {
+            padding: 10px;
+            margin: 10px 0;
+            width: 200px;
             font-size: 16px;
+        }
+
+        button {
             padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 10px;
+            font-size: 16px;
             cursor: pointer;
-            box-shadow: 0 4px #999;
-            transition: transform 0.1s ease;
         }
-
-        #next:hover {
-            background-color: #45a049;
-        }
-
-        #next:active {
-            transform: scale(0.95);
-            box-shadow: 0 2px #666;
-        }
-
-        /* Style the Next button when disabled */
-        #next:disabled {
-            background-color: #ddd;
-            color: #aaa;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
     </style>
-</head>
-<body>
-    <h2 style="color:white; text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);">Solve the Equation</h2>
-    <div id="equation">
-        <!-- Algebraic equation will be displayed here -->
-    </div>
-    <form id="guess-form" onsubmit="return submitGuess()">
-        <label for="guess" style="color:white; font-size:24px;">Your Answer ( ? = ): </label>
-        <input type="number" id="guess" name="guess" required style="padding: 10px; font-size: 18px; border-radius: 5px; border: none;">
-        <button type="submit" style="padding: 10px 20px; font-size: 16px; margin-left: 10px; border-radius: 10px; background-color: #008CBA; color: white; border: none; cursor: pointer; box-shadow: 0 4px #999; transition: transform 0.1s ease;">
-            Submit
-        </button>
-    </form>
-    <p id="result"></p>
-    <button id="next" onclick="generateEquation()" disabled>Next</button>
-
-
 
 
     
     <script>
-        let correctAnswer;
-        let attemptCount = 0;
+        function validateCode() {
+            const APIkey1 = atob("WW91bmdTaGVsZG9u");
+            const APIkey2 = atob("eW91bmdzaGVsZG9u");
+            const userCode = document.getElementById("codeInput").value;
 
-        // Function to generate a random algebraic equation with solutions between 1 and 10
-        function generateEquation() {
-            // Reset attempt count
-            attemptCount = 0;
+            const error = atob("aW5kZXhjb25uaWUuaHRtbA==");
 
-            // Choose a random variable name (e.g., x, m, y)
-            const variables = ['x', 'm', 'y', 'z'];
-            const variable = variables[Math.floor(Math.random() * variables.length)];
-
-            let a, b, c;
-            let equationText;
-
-            // Ensure the correct answer is always between 1 and 10
-            correctAnswer = Math.floor(Math.random() * 10) + 1;
-
-            // Randomly decide the equation type
-            const equationType = Math.floor(Math.random() * 3);
-
-            switch (equationType) {
-                case 0:
-                    b = Math.floor(Math.random() * 20) + 1;
-                    c = correctAnswer + b;
-                    equationText = `${variable} + ${b} = ${c}`;
-                    break;
-                case 1:
-                    b = Math.floor(Math.random() * 10) + 1;
-                    c = correctAnswer + b;
-                    equationText = `${c} - ${variable} = ${b}`;
-                    break;
-                case 2:
-                    a = Math.floor(Math.random() * 10) + 1;
-                    c = correctAnswer * a;
-                    equationText = `${a}${variable} = ${c}`;
-                    break;
-            }
-
-            // Display the equation
-            document.getElementById('equation').innerText = equationText;
-            document.getElementById('result').innerText = ''; // Clear previous result
-            document.getElementById('guess').value = ''; // Clear input field
-            document.getElementById('next').disabled = true; // Disable the Next button
-        }
-
-        // Function to check the user's answer
-        function submitGuess() {
-            const userGuess = parseFloat(document.getElementById('guess').value);
-            const resultElement = document.getElementById('result');
-            attemptCount++;
-
-            if (userGuess === correctAnswer) {
-                resultElement.innerText = "Correct!";
-                document.getElementById('next').disabled = false; // Enable the Next button
-                confetti(); // Trigger confetti animation
-            } else if (attemptCount >= 2) {
-                const hint = correctAnswer > userGuess ? "higher" : "lower";
-                resultElement.innerText = `Incorrect. Hint: Try a ${hint} number.`;
+            if (userCode === APIkey1 || userCode === APIkey2) {
+                window.location.href = error;
             } else {
-                resultElement.innerText = "Incorrect. Try again.";
+                alert("Incorrect code. Please try again.");
             }
-
-            // Prevent form from submitting (which would refresh the page)
-            return false;
         }
-
-        // Function to trigger a confetti animation on correct answer
-        function confetti() {
-            const duration = 2000;
-            const animationEnd = Date.now() + duration;
-            const colors = ['#ff6ec4', '#7873f5', '#fff'];
-
-            function randomInRange(min, max) {
-                return Math.random() * (max - min) + min;
-            }
-
-            const interval = setInterval(function() {
-                const timeLeft = animationEnd - Date.now();
-
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
-
-                const particleCount = 50 * (timeLeft / duration);
-                confetti({
-                    particleCount,
-                    startVelocity: 30,
-                    spread: 360,
-                    ticks: 60,
-                    origin: {
-                        x: Math.random(),
-                        y: Math.random() - 0.2
-                    },
-                    colors
-                });
-            }, 250);
-        }
-
-        // Generate the initial equation on page load
-        window.onload = generateEquation;
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <h2>Enter the six digit PIN code to continue</h2>
+    <input type="text" id="codeInput" placeholder="PIN code">
+    <button onclick="validateCode()">Submit</button>
 </body>
 </html>
