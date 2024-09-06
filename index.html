@@ -7,27 +7,36 @@
 
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            text-align: center;
             margin: 0;
+            padding: 0;
             font-family: Arial, sans-serif;
         }
 
         .container {
-            display: flex;
-            flex-direction: column; /* Ensures vertical stacking */
-            align-items: center;    /* Centers the elements horizontally */
-            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            margin: 100px auto; /* Center the container with a margin */
         }
 
-        h2, input, button {
-            display: block; /* Forces each element to be on its own line */
-            margin: 10px 0; /* Adds space between the elements */
+        h2 {
+            margin-bottom: 20px; /* Adds space between the h2 and the input box */
+        }
+
+        input {
+            display: block;
+            width: 100%; /* Full width inside the container */
             padding: 10px;
-            width: 200px;
+            margin-bottom: 20px; /* Space between input and button */
             font-size: 16px;
+        }
+
+        button {
+            display: block;
+            width: 100%; /* Full width inside the container */
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
 
