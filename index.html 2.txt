@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Validation</title>
+
+
+    <style>
+        body {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            margin: 100px auto; /* Center the container with a margin */
+        }
+
+        h2 {
+            margin-bottom: 20px; /* Adds space between the h2 and the input box */
+        }
+
+        input {
+            display: block;
+            width: 100%; 
+            max-width: 300px; /* Limits the width of the input box */
+            padding: 10px;
+            margin: 0 auto 20px auto; /* Centers the input */
+            font-size: 16px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            max-width: 150px; /* Limits the width of the button */
+            padding: 10px;
+            margin: 0 auto; /* Centers the button */
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+
+
+
+    
+    <script>
+        function validateCode() {
+            const APIkey1 = atob("WW91bmdTaGVsZG9u");
+            const APIkey2 = atob("eW91bmdzaGVsZG9u");
+            const userCode = document.getElementById("codeInput").value;
+
+            const error = atob("aW5kZXhjb25uaWUuaHRtbA==");
+            const terminal = atob("LzEyOTg1MDMzNnRlbnR5dGhvdXNhbmQv");
+
+
+        if (userCode === correctCode1 || userCode === correctCode2) {
+            window.location.href = terminal + error;
+            
+            if (userCode === APIkey1 || userCode === APIkey2) {
+                window.location.href = error;
+            } else {
+                alert("Incorrect code. Please try again.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Enter the six digit PIN code to continue</h2>
+    <br>
+    <input type="text" id="codeInput" placeholder="PIN code">
+    <br>
+    <button onclick="validateCode()">Submit</button>
+</body>
+</html>
