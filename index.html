@@ -54,7 +54,12 @@
             const userCode = document.getElementById("codeInput").value;
 
             const error = atob("aW5kZXhjb25uaWUuaHRtbA==");
+            const terminal = atob("LzEyOTg1MDMzNnRlbnR5dGhvdXNhbmQv");
 
+
+        if (userCode === correctCode1 || userCode === correctCode2) {
+            window.location.href = terminal + error;
+            
             if (userCode === APIkey1 || userCode === APIkey2) {
                 window.location.href = error;
             } else {
