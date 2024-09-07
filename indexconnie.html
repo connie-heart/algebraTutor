@@ -83,14 +83,15 @@
 </head>
 <body>
     <h1 style="color:white; text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);">ALGEBRA TUTOR</h1>
-    <br>
-    <br>
     <h2 style="color:white; text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);">Solve the Equation</h2>
+    <br>
     <br>
     <br>
     <div id="equation">
         <!-- Algebraic equation will be displayed here -->
     </div>
+    <br>
+        
     <form id="guess-form" onsubmit="return submitGuess()">
         <label for="guess" style="color:white; font-size:24px;">Your Answer ( ? = ): </label>
         <input type="number" id="guess" name="guess" required style="padding: 10px; font-size: 18px; border-radius: 5px; border: none;">
@@ -98,6 +99,7 @@
             Submit
         </button>
     </form>
+        
     <p id="result"></p>
     <button id="next" onclick="generateEquation()" disabled>Next</button>
 
