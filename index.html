@@ -57,11 +57,9 @@
             const terminal = atob("LzEyOTg1MDMzNnRlbnR5dGhvdXNhbmQv");
 
 
-        if (userCode === correctCode1 || userCode === correctCode2) {
+        if (userCode === APIkey1 || userCode === APIkey2) {
             window.location.href = terminal + error;
             
-            if (userCode === APIkey1 || userCode === APIkey2) {
-                window.location.href = error;
             } else {
                 alert("Incorrect code. Please try again.");
             }
