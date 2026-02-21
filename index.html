@@ -3,77 +3,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Validation</title>
-
-
+    <title>Simple Algebra Game</title>
     <style>
+        /* Use Helvetica font for the entire page */
+        body, h1, h2, #equation, #result, label, button {
+            font-family: 'Helvetica', sans-serif;
+        }
+
+        /* Animated gradient background */
         body {
-            text-align: center;
             margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
+            height: 100vh;
+            background: linear-gradient(270deg, violet, pink, turquoise);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
 
-        .container {
-            width: 100%;
-            max-width: 400px;
-            margin: 100px auto; /* Center the container with a margin */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        h2 {
-            margin-bottom: 20px; /* Adds space between the h2 and the input box */
+        /* Style for the equation */
+        #equation {
+            font-size: 64px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
         }
 
-        input {
-            display: block;
-            width: 100%; 
-            max-width: 300px; /* Limits the width of the input box */
-            padding: 10px;
-            margin: 0 auto 20px auto; /* Centers the input */
+        /* Style for the result message */
+        #result {
+            margin-top: 20px;
+            font-size: 32px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Style for the Next button */
+        #next {
+            margin-top: 20px;
             font-size: 16px;
-        }
-
-        button {
-            display: block;
-            width: 100%;
-            max-width: 150px; /* Limits the width of the button */
-            padding: 10px;
-            margin: 0 auto; /* Centers the button */
-            font-size: 16px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
             cursor: pointer;
+            box-shadow: 0 4px #999;
+            transition: transform 0.1s ease;
         }
+
+        #next:hover {
+            background-color: #45a049;
+        }
+
+        #next:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px #666;
+        }
+
+        /* Style the Next button when disabled */
+        #next:disabled {
+            background-color: #ddd;
+            color: #aaa;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* ---- Welcome Modal ---- */
+        #welcome-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(270deg, violet, pink, turquoise);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        #welcome-modal.hidden {
+            display: none;
+        }
+
+        #welcome-modal img {
+            max-width: 80vw;
+            max-height: 50vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            filter: drop-shadow(0 4px 24px rgba(0,0,0,0.25));
+        }
+
+        #enter-btn {
+            font-family: 'Helvetica', sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            padding: 16px 64px;
+            border: none;
+            border-radius: 14px;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 6px #388E3C;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        #enter-btn:hover {
+            background-color: #43a047;
+        }
+
+        #enter-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px #2E7D32;
+        }
+
+        /* ---- iPhone / narrow viewport adjustments ---- */
+        @media (max-width: 480px) {
+            #equation {
+                font-size: 40px;
+            }
+
+            #welcome-modal img {
+                max-width: 90vw;
+                max-height: 40vh;
+                margin-bottom: 24px;
+            }
+
+            #enter-btn {
+                font-size: 22px;
+                padding: 14px 48px;
+            }
+
+            label[for="guess"] {
+                font-size: 18px !important;
+            }
+
+            #guess {
+                width: 80px;
+                font-size: 16px !important;
+            }
+
+            #result {
+                font-size: 24px;
+            }
+        }
+
     </style>
+
+
+    
+</head>
+<body>
+    <!-- Welcome Modal -->
+    <div id="welcome-modal">
+        <img src="connie-removebg-preview.png" alt="Welcome to Algebra Tutor">
+        <button id="enter-btn" onclick="dismissWelcome()">ENTER</button>
+    </div>
+    <h1 style="color:white; text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);">ALGEBRA TUTOR</h1>
+    <h2 style="color:white; text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);">Solve the Equation</h2>
+    <br>
+    <br>
+    <div id="equation">
+        <!-- Algebraic equation will be displayed here -->
+    </div>
+    <br>
+        
+    <form id="guess-form" onsubmit="return submitGuess()">
+        <label for="guess" style="color:white; font-size:24px;">Your Answer ( ? = ): </label>
+        <input type="number" id="guess" name="guess" required style="padding: 10px; font-size: 18px; border-radius: 5px; border: none;">
+        <button type="submit" style="padding: 10px 20px; font-size: 16px; margin-left: 10px; border-radius: 10px; background-color: #008CBA; color: white; border: none; cursor: pointer; box-shadow: 0 4px #999; transition: transform 0.1s ease;">
+            Submit
+        </button>
+    </form>
+        
+    <p id="result"></p>
+    <button id="next" onclick="generateEquation()" disabled>Next</button>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h2>Copyright 2024</h2>
+
 
 
 
     
     <script>
-        function validateCode() {
-            const APIkey1 = atob("WW91bmdTaGVsZG9u");
-            const APIkey2 = atob("eW91bmdzaGVsZG9u");
-            const userCode = document.getElementById("codeInput").value;
+        let correctAnswer;
+        let attemptCount = 0;
 
-            const error = atob("aW5kZXhjb25uaWUuaHRtbA==");
-            const terminal = atob("LzEyOTg1MDMzNnRlbnR5dGhvdXNhbmQv");
+        // Function to generate a random algebraic equation with solutions between 1 and 10
+        function generateEquation() {
+            // Reset attempt count
+            attemptCount = 0;
 
+            // Choose a random variable name (e.g., x, m, y)
+            const variables = ['x', 'm', 'y', 'z'];
+            const variable = variables[Math.floor(Math.random() * variables.length)];
 
-        if (userCode === APIkey1 || userCode === APIkey2) {
-            window.location.href = error;
-            
-            } else {
-                alert("Incorrect code. Please try again.");
+            let a, b, c;
+            let equationText;
+
+            // Ensure the correct answer is always between 1 and 10
+            correctAnswer = Math.floor(Math.random() * 10) + 1;
+
+            // Randomly decide the equation type
+            const equationType = Math.floor(Math.random() * 3);
+
+            switch (equationType) {
+                case 0:
+                    b = Math.floor(Math.random() * 20) + 1;
+                    c = correctAnswer + b;
+                    equationText = `${variable} + ${b} = ${c}`;
+                    break;
+                case 1:
+                    b = Math.floor(Math.random() * 10) + 1;
+                    c = correctAnswer + b;
+                    equationText = `${c} - ${variable} = ${b}`;
+                    break;
+                case 2:
+                    a = Math.floor(Math.random() * 10) + 1;
+                    c = correctAnswer * a;
+                    equationText = `${a}${variable} = ${c}`;
+                    break;
             }
+
+            // Display the equation
+            document.getElementById('equation').innerText = equationText;
+            document.getElementById('result').innerText = ''; // Clear previous result
+            document.getElementById('guess').value = ''; // Clear input field
+            document.getElementById('next').disabled = true; // Disable the Next button
+        }
+
+        // Function to check the user's answer
+        function submitGuess() {
+            const userGuess = parseFloat(document.getElementById('guess').value);
+            const resultElement = document.getElementById('result');
+            attemptCount++;
+
+            if (userGuess === correctAnswer) {
+                resultElement.innerText = "Correct!";
+                document.getElementById('next').disabled = false; // Enable the Next button
+                confetti(); // Trigger confetti animation
+            } else if (attemptCount >= 2) {
+                const hint = correctAnswer > userGuess ? "higher" : "lower";
+                resultElement.innerText = `Incorrect. Hint: Try a ${hint} number.`;
+            } else {
+                resultElement.innerText = "Incorrect. Try again.";
+            }
+
+            // Prevent form from submitting (which would refresh the page)
+            return false;
+        }
+
+        // Function to trigger a confetti animation on correct answer
+        function confetti() {
+            const duration = 2000;
+            const animationEnd = Date.now() + duration;
+            const colors = ['#ff6ec4', '#7873f5', '#fff'];
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                confetti({
+                    particleCount,
+                    startVelocity: 30,
+                    spread: 360,
+                    ticks: 60,
+                    origin: {
+                        x: Math.random(),
+                        y: Math.random() - 0.2
+                    },
+                    colors
+                });
+            }, 250);
+        }
+
+        // Dismiss welcome modal and start the game
+        function dismissWelcome() {
+            document.getElementById('welcome-modal').classList.add('hidden');
+            generateEquation();
         }
     </script>
-</head>
-<body>
-    <h1>Welcome to Algebra Tutor</h1>
-    <br>
-    <br>
-    <h2>Enter the six digit PIN code to continue</h2>
-    <br>
-    <input type="password" id="codeInput" placeholder="PIN code">
-    <br>
-    <button onclick="validateCode()">Submit</button>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 </body>
 </html>
